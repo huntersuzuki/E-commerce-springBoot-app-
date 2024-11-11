@@ -3,15 +3,17 @@ package com.pranay.dreamshops.services.product;
 import java.util.List;
 
 import com.pranay.dreamshops.model.Product;
+import com.pranay.dreamshops.requests.AddProductRequest;
+import com.pranay.dreamshops.requests.ProductUpdateRequest;
 
 public interface IProductService {
-    Product addProduct(Product product);
+    Product addProduct(AddProductRequest product);
 
     Product getProductById(Long id);
 
     void deleteProductById(Long id);
 
-    void updateProduct(Product product, Long productId);
+    Product updateProduct(ProductUpdateRequest product, Long productId);
 
     List<Product> getAllProducts();
 
@@ -23,7 +25,7 @@ public interface IProductService {
 
     List<Product> getProductByName(String name);
 
-    List<Product> getProductsByNameAndBrand(String name, String brand);
+    List<Product> getProductsByBrandAndName(String brand, String name);
 
     Long countProductsByBrandAndName(String brand, String name);
 }

@@ -1,12 +1,17 @@
 package com.pranay.dreamshops.services.product;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.pranay.dreamshops.exceptions.ProductNotFoundException;
+import com.pranay.dreamshops.model.Category;
 import com.pranay.dreamshops.model.Product;
+import com.pranay.dreamshops.repository.CategoryRepository;
 import com.pranay.dreamshops.repository.ProductRepository;
+import com.pranay.dreamshops.requests.AddProductRequest;
+import com.pranay.dreamshops.requests.ProductUpdateRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,18 +19,36 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductService implements IProductService {
 
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
-    public Product addProduct(Product product) {
-        // TODO Auto-generated method stub
-        return null;
+    public Product addProduct(AddProductRequest request) {
+
+        Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
+                .orElseGet(() -> {
+                    Category newCategory = new Category(request.getCategory().getName());
+                    return categoryRepository.save(newCategory);
+                });
+        request.setCategory(category);
+        return productRepository.save(createProduct(request, category));
+    }
+
+    private Product createProduct(AddProductRequest request, Category category) {
+
+        return new Product(
+                request.getName(),
+                request.getBrand(),
+                request.getPrice(),
+                request.getInventory(),
+                request.getDescription(),
+                category);
     }
 
     @Override
     public Long countProductsByBrandAndName(String brand, String name) {
-        // TODO Auto-generated method stub
-        return null;
+
+        return productRepository.countByBrandAndName(brand, name);
     }
 
     @Override
@@ -52,7 +75,7 @@ public class ProductService implements IProductService {
 
     @Override
     public List<Product> getProductByName(String name) {
-        
+
         return productRepository.findByProductName(name);
     }
 
@@ -72,15 +95,27 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> getProductsByNameAndBrand(String name, String brand) {
-        // TODO Auto-generated method stub
-        return null;
+    public List<Product> getProductsByBrandAndName(String brand, String name) {
+        return productRepository.findByBrandAndName(brand, name);
     }
 
     @Override
-    public void updateProduct(Product product, Long productId) {
-        // TODO Auto-generated method stub
+    public Product updateProduct(ProductUpdateRequest request, Long productId) {
+        return productRepository.findById(productId)
+                .map(existingProduct -> updateExistingProduct(existingProduct, request))
+                .map(productRepository::save)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found."));
+    }
 
+    private Product updateExistingProduct(Product existingProduct, ProductUpdateRequest request) {
+        existingProduct.setName(request.getName());
+        existingProduct.setBrand(request.getBrand());
+        existingProduct.setPrice(request.getPrice());
+        existingProduct.setInventory(request.getInventory());
+        existingProduct.setDescription(request.getDescription());
+        Category category = categoryRepository.findByName(request.getCategory().getName());
+        existingProduct.setCategory(category);
+        return existingProduct;
     }
 
 }
