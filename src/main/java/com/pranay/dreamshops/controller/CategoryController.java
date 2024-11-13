@@ -18,7 +18,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("${api.prefix}/images")
+@RequestMapping("${api.prefix}/categories")
 public class CategoryController {
     private final ICategoryService categoryService;
 
@@ -52,11 +52,21 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/{name}/category")
+    @GetMapping("category/{name}/category")
     public ResponseEntity<ApiResponse> getCategoryByName(@PathVariable String name){
         try {
             Category theCategory = categoryService.getCategoryByName(name);
             return ResponseEntity.ok(new ApiResponse("Found the category.",theCategory));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(),null));
+        }
+    }
+
+    @PutMapping("category/{id}/update")
+    public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long id,@RequestBody Category category){
+        try {
+            Category updateCategory = categoryService.updateCategory(category,id);
+            return ResponseEntity.ok(new ApiResponse("Category updated Successfully.",updateCategory));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(),null));
         }
