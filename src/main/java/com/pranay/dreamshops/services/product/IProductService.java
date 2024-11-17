@@ -2,6 +2,7 @@ package com.pranay.dreamshops.services.product;
 
 import java.util.List;
 
+import com.pranay.dreamshops.dto.ProductDto;
 import com.pranay.dreamshops.model.Product;
 import com.pranay.dreamshops.requests.AddProductRequest;
 import com.pranay.dreamshops.requests.ProductUpdateRequest;
@@ -30,4 +31,8 @@ public interface IProductService {
 	List<Product> getProductsByBrandAndName(String brand, String name);
 
 	Long countProductsByBrandAndName(String brand, String name);
+
+	List<ProductDto> getConvertedProducts(List<Product> products);
+
+	ProductDto convertToDto(Product product);
 }
