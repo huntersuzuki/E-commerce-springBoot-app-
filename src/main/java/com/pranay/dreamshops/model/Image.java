@@ -2,6 +2,7 @@ package com.pranay.dreamshops.model;
 
 import java.sql.Blob;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,12 +26,14 @@ public class Image {
     private Long id;
     private String fileName;
     private String fileType;
+    @JsonIgnore
     @Lob
     private Blob image; // blob is a datatype used to store large binary data
-                        // such as image, audio , video etc.
+    // such as image, audio , video etc.
     private String downloadUrl;
 
     // Relation-ship to the product entity.
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
