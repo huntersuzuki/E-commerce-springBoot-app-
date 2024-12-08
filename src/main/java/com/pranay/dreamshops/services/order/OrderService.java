@@ -5,11 +5,13 @@ import com.pranay.dreamshops.exceptions.ResourceNotFoundException;
 import com.pranay.dreamshops.model.*;
 import com.pranay.dreamshops.repository.OrderRepository;
 import com.pranay.dreamshops.repository.ProductRepository;
+import com.pranay.dreamshops.services.cart.ICartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -18,14 +20,24 @@ public class OrderService implements IOrderService {
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
+    private final ICartService cartService;
 
     @Override
     public Order placeOrder(Long userId) {
-        return null;
+
+        Cart cart = cartService.getCartByUserId(userId);
+        Order order = createOrder(cart);
+        List<OrderItem> orderItemList = createOrderItems(order, cart);
+        order.setOrderItems(new HashSet<>(orderItemList));
+        order.setTotalAmount(calculateTotalAmount(orderItemList));
+        Order savedOrder = orderRepository.save(order);
+        cartService.clearCart(cart.getId());
+        return savedOrder;
     }
 
     private Order createOrder(Cart cart) {
         Order order = new Order();
+        order.setUser(cart.getUser());
         order.setOrderStatus(OrderStatus.PENDING);
         order.setOrderDate(LocalDate.now());
         return order;
@@ -51,5 +63,10 @@ public class OrderService implements IOrderService {
                 .map(item -> item.getPrice()
                         .multiply(new BigDecimal(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    @Override
+    public List<Order> getUserOrders(Long userId) {
+        return orderRepository.findByUserId(userId);
     }
 }
