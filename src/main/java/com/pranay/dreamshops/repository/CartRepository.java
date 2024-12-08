@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Qualifier("cart")
 public interface CartRepository extends JpaRepository<Cart, Long> {
+    Cart findByUserId(Long userId);
 }
