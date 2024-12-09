@@ -2,25 +2,32 @@ package com.pranay.dreamshops.controller;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.pranay.dreamshops.exceptions.AlreadyExistsException;
 import com.pranay.dreamshops.exceptions.ResourceNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import com.pranay.dreamshops.model.Category;
 import com.pranay.dreamshops.response.ApiResponse;
 import com.pranay.dreamshops.services.category.ICategoryService;
 
 import lombok.RequiredArgsConstructor;
 
-import static org.springframework.http.HttpStatus.*;
-
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("${api.prefix}/categories")
 public class CategoryController {
-	@Autowired
+
 	private final ICategoryService categoryService;
 
 	@GetMapping("/all-categories")
