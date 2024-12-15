@@ -1,5 +1,6 @@
 package com.pranay.dreamshops.services.order;
 
+import com.pranay.dreamshops.dto.OrderDto;
 import com.pranay.dreamshops.enums.OrderStatus;
 import com.pranay.dreamshops.exceptions.ResourceNotFoundException;
 import com.pranay.dreamshops.model.*;
@@ -7,6 +8,7 @@ import com.pranay.dreamshops.repository.OrderRepository;
 import com.pranay.dreamshops.repository.ProductRepository;
 import com.pranay.dreamshops.services.cart.ICartService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -21,6 +23,8 @@ public class OrderService implements IOrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final ICartService cartService;
+    private final ModelMapper modelMapper;
+
 
     @Override
     public Order placeOrder(Long userId) {
@@ -53,8 +57,9 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Order getOrder(Long orderId) {
+    public OrderDto getOrder(Long orderId) {
         return orderRepository.findById(orderId)
+                .map(this::convertToDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
     }
 
@@ -66,7 +71,13 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public List<Order> getUserOrders(Long userId) {
-        return orderRepository.findByUserId(userId);
+    public List<OrderDto> getUserOrders(Long userId) {
+        List<Order> orders = orderRepository.findByUserId(userId);
+        return orders.stream().map(this::convertToDto).toList();
+    }
+
+    @Override
+    public OrderDto convertToDto(Order order) {
+        return modelMapper.map(order, OrderDto.class);
     }
 }
