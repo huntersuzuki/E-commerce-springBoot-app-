@@ -78,6 +78,14 @@ ensuring scalability, modularity, and secure user authentication.
 
 ---
 
+## Database ER Diagram
+
+Below is the database schema for the e-commerce application:
+
+![Database ER Diagram](./docs/E-commerce spingboot app EER diagram.jpg)
+
+---
+
 Feel free to explore the project, suggest improvements, or contribute by submitting a pull request. Your feedback is
 highly appreciated! 😊
 
