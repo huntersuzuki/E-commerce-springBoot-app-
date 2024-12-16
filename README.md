@@ -74,7 +74,6 @@ ensuring scalability, modularity, and secure user authentication.
 
 5. **API Endpoints**:
     - Access the APIs via tools like Postman or any frontend application.
-    - API documentation is available at `http://localhost:8080/swagger-ui` (if Swagger is integrated).
 
 ---
 
