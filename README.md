@@ -81,7 +81,7 @@ ensuring scalability, modularity, and secure user authentication.
 
 Below is the database schema for the e-commerce application:
 
-![Database ER Diagram](docs/E-commerce spingboot app EER diagram.jpg)
+![Database ER Diagram](https://github.com/huntersuzuki/E-commerce-springBoot-app-/blob/main/docs/E-commerce%20spingboot%20app%20EER%20diagram.jpg?raw=true)
 
 ---
 
