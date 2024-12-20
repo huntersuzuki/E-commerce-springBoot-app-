@@ -36,6 +36,14 @@ ensuring scalability, modularity, and secure user authentication.
 
 ---
 
+## Database ER Diagram
+
+Below is the database schema for the e-commerce application:
+
+![Database ER Diagram](https://github.com/huntersuzuki/E-commerce-springBoot-app-/blob/main/docs/E-commerce%20spingboot%20app%20EER%20diagram.jpg?raw=true)
+
+---
+
 ## Tech Stack
 
 - **Spring Boot**: Backend framework.
@@ -74,14 +82,6 @@ ensuring scalability, modularity, and secure user authentication.
 
 5. **API Endpoints**:
     - Access the APIs via tools like Postman or any frontend application.
-
----
-
-## Database ER Diagram
-
-Below is the database schema for the e-commerce application:
-
-![Database ER Diagram](docs/E-commerce spingboot app EER diagram.jpg)
 
 ---
 
